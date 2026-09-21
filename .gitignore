@@ -1,0 +1,31 @@
+# Private dataset and media
+data/
+dataset/
+datasets/
+images/
+labels/
+videos/
+*.mp4
+*.mkv
+*.avi
+*.mov
+
+# Local dataset configuration
+data.yaml
+
+# Training artifacts and model weights
+runs/
+weights/
+*.pt
+*.onnx
+*.engine
+
+# Python environment and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Annotation-tool metadata
+classes.txt
