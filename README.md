@@ -2,7 +2,7 @@
 
 本仓库记录使用 Ultralytics YOLO 对 Apex Legends 游戏画面进行目标检测的个人实验。当前公开的训练报告是 **YOLOv8n 三类别基线**，识别 `enemy`、`ally` 和 `fallen`。
 
-> 数据集、原始视频、截图及标注是个人使用素材，不会上传；详见 [DATASET_NOTICE.md](DATASET_NOTICE.md)。本次指标来自验证集，不是独立测试集。
+> 完整数据集、原始视频、原始截图和标注文件不公开；仓库仅展示两张验证集拼接示例，详见 [DATASET_NOTICE.md](DATASET_NOTICE.md)。本次指标来自验证集，不是独立测试集。
 
 ## 当前模型结果
 
@@ -111,7 +111,7 @@ results = model.predict("path/to/image.jpg", imgsz=640, conf=0.25)
 
 - `data.example.yaml`：本地数据配置模板，不含数据集绝对路径。
 - `training-config.yaml`：本轮训练参数与环境记录。
-- `results/yolov8n-apex-3class/`：逐轮指标及训练、验证图表，不含原始图片。
+- `results/yolov8n-apex-3class/`：逐轮指标及训练、验证图表；`examples/` 中仅有两张拼接示例，不含原始图片。
 - `DATASET_NOTICE.md`：私有数据集和素材说明。
 
 本项目用于个人学习、数据标注和模型实验。请遵守游戏、平台和相关素材的使用条款，不要将模型用于破坏公平游戏体验的用途。本仓库未指定开源许可证。
