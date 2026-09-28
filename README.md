@@ -31,6 +31,24 @@ YOLOv8n 使用 `yolov8n.pt` 预训练权重微调。训练最多 100 轮，在�
 
 逐轮训练指标见 [`results.csv`](results/yolov8n-apex-3class/results.csv)。
 
+## 验证集拼接例图
+
+以下两张拼图来自验证集 batch 0，仅用于展示标注和模型预测的可视化效果；它们不代表全部验证样本或模型整体准确率。完整图片集和标签文件不公开。
+
+<table>
+  <tr>
+    <th>人工标注</th>
+    <th>YOLOv8n 预测</th>
+  </tr>
+  <tr>
+    <td><img src="results/yolov8n-apex-3class/examples/validation-manual-labels.jpg" alt="验证集人工标注拼图" width="480"></td>
+    <td><img src="results/yolov8n-apex-3class/examples/validation-predictions.jpg" alt="验证集模型预测拼图" width="480"></td>
+  </tr>
+</table>
+
+## 数据来源与标注致谢
+
+本项目数据集中的 `enemy`、`ally` 和 `fallen` 目标框由本人逐张手动标注。标注工作使用了 [LabelNazuki 图像标注工具](https://github.com/Nazukida/labelnazuki)。感谢 Nazukida 开发并分享这款工具，帮助完成本项目的数据标注工作。
 ## 训练设置
 
 - 模型：YOLOv8n（nano），从 `yolov8n.pt` 预训练权重微调
