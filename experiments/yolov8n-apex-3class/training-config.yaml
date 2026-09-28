@@ -1,0 +1,22 @@
+model: yolov8n.pt
+framework: ultralytics
+ultralytics_version: 8.4.158
+python: 3.11
+pytorch: 2.5.1
+gpu: NVIDIA GeForce RTX 3070 Laptop GPU
+fine_tune: true
+data_template: dataset-template.yaml
+classes: [enemy, ally, fallen]
+image_size: 640
+batch: 4
+epochs_max: 100
+epochs_completed: 92
+best_epoch: 72
+early_stopping_patience: 20
+device: cuda:0
+workers: 0
+optimizer: auto
+seed: 0
+deterministic: true
+resumed_during_original_run: true
+resume_checkpoint_in_export: false
