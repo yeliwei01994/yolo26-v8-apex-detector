@@ -1,8 +1,0 @@
-path: /absolute/path/to/apex_dataset
-train: images/train
-val: images/val
-nc: 3
-names:
-  0: enemy
-  1: ally
-  2: fallen

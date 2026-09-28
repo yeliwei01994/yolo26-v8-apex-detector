@@ -5,7 +5,7 @@ python: 3.11
 pytorch: 2.5.1
 gpu: NVIDIA GeForce RTX 3070 Laptop GPU
 fine_tune: true
-data_template: dataset-template.yaml
+data_template: data.example.yaml
 classes: [enemy, ally, fallen]
 image_size: 640
 batch: 4
@@ -19,4 +19,4 @@ optimizer: auto
 seed: 0
 deterministic: true
 resumed_during_original_run: true
-resume_checkpoint_in_export: false
+resume_checkpoint_in_repository: false

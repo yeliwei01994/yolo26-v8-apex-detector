@@ -1,9 +1,10 @@
-# Copy this file to data.yaml and replace the path with your local dataset path.
-path: /absolute/path/to/apex_person_dataset
+# Copy this file to data.yaml and set path to the local dataset directory.
+path: /absolute/path/to/apex_dataset
 train: images/train
 val: images/val
-test: images/test
 
-nc: 1
+nc: 3
 names:
-  0: person
+  0: enemy
+  1: ally
+  2: fallen
