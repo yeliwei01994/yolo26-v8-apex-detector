@@ -1,0 +1,30 @@
+experiment: yolo26n-apex-3class
+model: yolo26n.pt
+initial_weights: Ultralytics YOLO26n pretrained checkpoint
+framework: ultralytics
+ultralytics_version: 8.4.158
+python: 3.11
+pytorch: 2.5.1
+gpu: NVIDIA GeForce RTX 3070 Laptop GPU
+fine_tune: true
+classes: [enemy, ally, fallen]
+dataset_split:
+  train_images: 3011
+  validation_images: 796
+  validation_objects: 781
+image_size: 640
+batch: 4
+epochs_max: 100
+epochs_completed: 100
+best_csv_epoch: 76
+optimizer: auto (runtime-selected AdamW)
+runtime_learning_rate: 0.001429
+runtime_momentum: 0.9
+patience: 20
+device: cuda:0
+workers: 0
+seed: 0
+deterministic: true
+resumed_during_original_run: true
+resume_checkpoint: local runs/yolo26n_apex/weights/last.pt
+dataset_yaml: local dataset.local.yaml (not included)

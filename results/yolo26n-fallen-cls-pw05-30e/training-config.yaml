@@ -1,0 +1,33 @@
+experiment: yolo26n-fallen-cls-pw05-30e
+model: yolo26n fine-tune
+initial_checkpoint: local runs/yolo26n_apex/weights/best.pt
+framework: ultralytics
+ultralytics_version: 8.4.158
+python: 3.11
+pytorch: 2.5.1
+gpu: NVIDIA GeForce RTX 3070 Laptop GPU
+classes: [enemy, ally, fallen]
+dataset_split:
+  train_images: 3011
+  validation_images: 796
+  validation_objects: 781
+image_size: 640
+batch: 4
+epochs: 30
+epochs_completed: 30
+best_csv_epoch: 23
+optimizer: AdamW
+lr0: 0.0003
+patience: 10
+cls_pw: 0.5
+effective_class_weights:
+  enemy: 0.50
+  ally: 0.98
+  fallen: 1.52
+device: cuda:0
+workers: 0
+seed: 0
+deterministic: true
+resumed_during_original_run: true
+resume_checkpoint: local runs/yolo26n_apex_fallen_pw05_30e/weights/last.pt
+dataset_yaml: local dataset.local.yaml (not included)
