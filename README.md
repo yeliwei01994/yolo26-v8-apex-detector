@@ -4,6 +4,8 @@
 
 > 完整数据集、原始视频、原始截图和标注文件不公开；仓库仅展示两张验证集拼接示例，详见 [DATASET_NOTICE.md](DATASET_NOTICE.md)。本次指标来自验证集，不是独立测试集。
 
+当前建议优先使用 **YOLO26n 三类别基线**：在相同数据划分与主要训练参数下，它是三个实验中总体 mAP50 与 mAP50-95 最高的模型。模型权重不随仓库发布，需按下方命令在本地训练。
+
 ## 实验总览
 
 三个实验使用相同的训练/验证划分：3,011 张训练图片、796 张验证图片。当前验证集总体 mAP50-95 最高的是 YOLO26n 基线；针对 `fallen` 增加类别权重的 30 轮微调没有提升总体指标，但混淆矩阵中的 `fallen` 对角线从约 0.49 增至 0.52。完整参数、逐轮 CSV、曲线和局限说明见[详细实验报告](EXPERIMENTS.md)。
@@ -15,6 +17,8 @@
 | YOLO26n `fallen` 类别加权微调 | 23（30 轮中最佳） | 0.763 | 0.729 | 0.770 | 0.493 |
 
 这些是验证集结果；`fallen` 在验证集中只有 71 个目标，类别加权后的变化应结合更多独立样本和实际游戏画面判断。模型权重与完整数据集不会放入 Git。
+
+相对 YOLOv8n 基线，YOLO26n 基线的验证集 Recall 提升 2.9 个百分点，mAP50 提升 2.7 个百分点，mAP50-95 提升 2.3 个百分点。类别加权微调的总体 mAP50-95 与 YOLO26n 基线基本持平，因此它目前是针对 `fallen` 的探索性实验，而非默认推荐模型。
 
 YOLOv8n 的轮次和汇总指标沿用原有最佳权重验证报告；其导出的 `results.csv` 有 91 行、最后的 `epoch` 字段为 91，最佳指标行字段为 71。两份历史记录的轮次标记相差一位，详细报告中保留了这个来源差异。
 
@@ -65,9 +69,10 @@ YOLOv8n 使用 `yolov8n.pt` 预训练权重微调。训练最多 100 轮，在�
 本项目数据集中的 `enemy`、`ally` 和 `fallen` 目标框由本人逐张手动标注。标注工作使用了 [LabelNazuki 图像标注工具](https://github.com/Nazukida/labelnazuki)。感谢 Nazukida 开发并分享这款工具，帮助完成本项目的数据标注工作。
 ## 训练设置
 
-- 模型：YOLOv8n（nano），从 `yolov8n.pt` 预训练权重微调
+- 基线模型：YOLOv8n 与 YOLO26n（nano），分别从 `yolov8n.pt`、`yolo26n.pt` 预训练权重微调
 - 图片尺寸：640 × 640；batch size：4
-- 最大训练轮数：100；早停 patience：20；最佳轮次：72；实际完成：92
+- 基线最大训练轮数：100；早停 patience：20
+- YOLOv8n：最佳轮次 72，实际完成 92 轮；YOLO26n：最佳轮次 77，实际完成 97 轮
 - Optimizer：`auto`；设备：CUDA 0；workers：0
 - 随机种子：0；deterministic：开启
 - 数据：3,011 张训练图片；796 张验证图片、781 个验证标注目标
@@ -108,24 +113,32 @@ yolo detect train model=yolov8n.pt data=data.yaml epochs=100 imgsz=640 batch=4 p
 
 此命令从预训练权重开始新的训练。续训时需要将模型路径指向对应 run 中的 `weights/last.pt` 并使用 `resume=True`。本仓库的 `.gitignore` 排除 `runs/`、`*.pt` 和本地 `data.yaml`；训练权重保留在本地，不纳入 Git 历史。
 
+训练当前推荐的 YOLO26n 基线时，仅需替换模型与运行名称：
+
+```powershell
+yolo detect train model=yolo26n.pt data=data.yaml epochs=100 imgsz=640 batch=4 patience=20 device=0 workers=0 project=runs name=yolo26n_apex seed=0 deterministic=True
+```
+
 ## 推理
 
-训练完成后，在本地加载 `runs/yolov8n_apex/weights/best.pt`：
+训练完成后，在本地加载相应 run 的 `weights/best.pt`。例如，当前推荐的 YOLO26n 基线：
 
 ```python
 from ultralytics import YOLO
 
-model = YOLO("runs/yolov8n_apex/weights/best.pt")
+model = YOLO("runs/yolo26n_apex/weights/best.pt")
 results = model.predict("path/to/image.jpg", imgsz=640, conf=0.25)
 ```
 
-`conf=0.25` 仅为示例阈值，应根据误检和漏检需求在独立数据上调整。此仓库未提供测试集结果。
+`conf=0.25` 仅为示例阈值，应根据误检和漏检需求在独立数据上调整。若使用 YOLOv8n，请将路径替换为 `runs/yolov8n_apex/weights/best.pt`。此仓库未提供测试集结果。
 
 ## 文件与使用边界
 
 - `data.example.yaml`：本地数据配置模板，不含数据集绝对路径。
-- `training-config.yaml`：本轮训练参数与环境记录。
-- `results/yolov8n-apex-3class/`：逐轮指标及训练、验证图表；`examples/` 中仅有两张拼接示例，不含原始图片。
+- `training-config.yaml`：YOLOv8n 基线的训练参数与环境记录。
+- `results/yolov8n-apex-3class/`：YOLOv8n 逐轮指标及训练、验证图表；`examples/` 中仅有两张拼接示例，不含原始图片。
+- `results/yolo26n-apex-3class/`：YOLO26n 三类别基线的逐轮指标、参数记录与图表。
+- `results/yolo26n-fallen-cls-pw05-30e/`：`fallen` 类别加权微调实验的逐轮指标、参数记录与图表。
 - `DATASET_NOTICE.md`：私有数据集和素材说明。
 
 本项目用于个人学习、数据标注和模型实验。请遵守游戏、平台和相关素材的使用条款，不要将模型用于破坏公平游戏体验的用途。本仓库未指定开源许可证。
